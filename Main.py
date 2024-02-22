@@ -2,9 +2,10 @@ import pygame
 
 PATH_TO_LEVELS = "levels\\"
 MAX_FPS = 60
-SCALE_FACTOR = 4
+SCALE_FACTOR = 16
 LEVEL_BACKGROUND_COLOR = (252, 251, 220)
 UNUSED_AREA_COLOR = (0, 0, 0)
+OBSTACLE_COLOR = (80, 80, 80)
 
 level_width, level_height = 0, 0
 screen_info = 0
@@ -41,7 +42,9 @@ def displayLevel(level):
     for i in range(level_height):
         for j in range(level_width):
             if board[i][j] == ".": pixelColor = LEVEL_BACKGROUND_COLOR
+            elif board[i][j] == "#": pixelColor = OBSTACLE_COLOR
             else: pixelColor = (255, 0, 0)
+
             for k in range(SCALE_FACTOR):
                 for l in range(SCALE_FACTOR):
                     surface.set_at((level_left + j * SCALE_FACTOR + k, level_top + i * SCALE_FACTOR + l), pixelColor)
