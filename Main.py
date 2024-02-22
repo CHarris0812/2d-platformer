@@ -1,4 +1,83 @@
+import pygame
 
+PATH_TO_LEVELS = "levels\\"
+MAX_FPS = 60
+SCALE_FACTOR = 4
+LEVEL_BACKGROUND_COLOR = (252, 251, 220)
+UNUSED_AREA_COLOR = (0, 0, 0)
+
+level_width, level_height = 0, 0
+screen_info = 0
+
+#Load level file and generate board from it
+#param level: filename
+#return: array of chars representing level
+def generateLevel(level):
+    global level_width, level_height
+    board = []
+    f = open(PATH_TO_LEVELS + level)
+    for line in f:
+        board.append(list(line.replace("\n", "")))
+    level_width = len(board[0])
+    level_height = len(board)
+    return board
+
+#Display level represented as array using pygame
+#param level: array of level
+#param screen: pygame display
+#return: pygame surface
+def displayLevel(level):
+    #Calculate where to place the level
+    level_left = screen_info.current_w // 2 - (level_width * SCALE_FACTOR) // 2
+    level_top = screen_info.current_h // 2 - (level_height * SCALE_FACTOR) // 2
+    
+    #Create surface
+    surface = pygame.Surface((screen_info.current_w, screen_info.current_h))
+
+    #Start by filling in whole screen
+    surface.fill(UNUSED_AREA_COLOR)
+
+    #Draw board
+    for i in range(level_height):
+        for j in range(level_width):
+            if board[i][j] == ".": pixelColor = LEVEL_BACKGROUND_COLOR
+            else: pixelColor = (255, 0, 0)
+            for k in range(SCALE_FACTOR):
+                for l in range(SCALE_FACTOR):
+                    surface.set_at((level_left + j * SCALE_FACTOR + k, level_top + i * SCALE_FACTOR + l), pixelColor)
+
+    return surface
+
+
+if __name__ == "__main__":
+    board = generateLevel("test_level.txt")
+
+    pygame.init()
+    screen_info = pygame.display.Info()
+    screen = pygame.display.set_mode((screen_info.current_w, screen_info.current_h))
+    clock = pygame.time.Clock()
+    running = True
+
+    while running:
+        #Check if x has been pressed. If so, exit
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+
+        #Display level
+        level = displayLevel(board)
+        screen.blit(level, (0, 0))
+
+        #Render screen
+        pygame.display.flip()
+
+        #Limit fps
+        clock.tick(MAX_FPS)
+
+        
+
+
+    
 
 
 # TODO LIST
