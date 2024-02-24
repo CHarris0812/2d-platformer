@@ -69,8 +69,8 @@ if __name__ == "__main__":
     level = displayLevel(board)
 
     #Create player
-    player = Player.Player(MAX_FPS)
-    playerSurface = pygame.Surface((SCALE_FACTOR * 10, SCALE_FACTOR * 10))
+    player = Player.Player(MAX_FPS, 600, 600)
+    playerSurface = pygame.Surface((SCALE_FACTOR * 2, SCALE_FACTOR * 2))
     playerSurface.fill(PLAYER_COLOR)
 
     while running:
@@ -84,7 +84,7 @@ if __name__ == "__main__":
 
         #Update and display player
         keys = pygame.key.get_pressed()
-        player.updateLocation(keys)
+        player.updateLocation(keys, board)
         screen.blit(playerSurface, player.getTopLeftPosition())
 
         #Render screen
