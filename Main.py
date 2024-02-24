@@ -1,11 +1,14 @@
 import pygame
 
+import Player
+
 PATH_TO_LEVELS = "levels\\"
 MAX_FPS = 60
 SCALE_FACTOR = 16
 LEVEL_BACKGROUND_COLOR = (252, 251, 220)
 UNUSED_AREA_COLOR = (0, 0, 0)
 OBSTACLE_COLOR = (80, 80, 80)
+PLAYER_COLOR = (0, 0, 255)
 
 level_width, level_height = 0, 0
 screen_info = 0
@@ -52,6 +55,7 @@ def displayLevel(level):
     return surface
 
 
+
 if __name__ == "__main__":
     board = generateLevel("test_level.txt")
 
@@ -61,6 +65,14 @@ if __name__ == "__main__":
     clock = pygame.time.Clock()
     running = True
 
+    #Create level surface
+    level = displayLevel(board)
+
+    #Create player
+    player = Player.Player(MAX_FPS)
+    playerSurface = pygame.Surface((SCALE_FACTOR * 10, SCALE_FACTOR * 10))
+    playerSurface.fill(PLAYER_COLOR)
+
     while running:
         #Check if x has been pressed. If so, exit
         for event in pygame.event.get():
@@ -68,12 +80,15 @@ if __name__ == "__main__":
                 running = False
 
         #Display level
-        level = displayLevel(board)
         screen.blit(level, (0, 0))
+
+        #Update and display player
+        keys = pygame.key.get_pressed()
+        player.updateLocation(keys)
+        screen.blit(playerSurface, player.getTopLeftPosition())
 
         #Render screen
         pygame.display.flip()
-
         #Limit fps
         clock.tick(MAX_FPS)
 
