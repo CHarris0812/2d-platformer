@@ -30,11 +30,7 @@ def generateLevel(level):
 #param level: array of level
 #param screen: pygame display
 #return: pygame surface
-def displayLevel(level):
-    #Calculate where to place the level
-    level_left = screen_info.current_w // 2 - (level_width * SCALE_FACTOR) // 2
-    level_top = screen_info.current_h // 2 - (level_height * SCALE_FACTOR) // 2
-    
+def displayLevel(level_left, level_top):
     #Create surface
     surface = pygame.Surface((screen_info.current_w, screen_info.current_h))
 
@@ -66,10 +62,12 @@ if __name__ == "__main__":
     running = True
 
     #Create level surface
-    level = displayLevel(board)
+    level_left = screen_info.current_w // 2 - (level_width * SCALE_FACTOR) // 2
+    level_top = screen_info.current_h // 2 - (level_height * SCALE_FACTOR) // 2
+    level = displayLevel(level_left, level_top)
 
     #Create player
-    player = Player.Player(MAX_FPS, 600, 600)
+    player = Player.Player(MAX_FPS, 600, 600, level_left, level_top, SCALE_FACTOR)
     playerSurface = pygame.Surface((SCALE_FACTOR * 2, SCALE_FACTOR * 2))
     playerSurface.fill(PLAYER_COLOR)
 
