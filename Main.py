@@ -98,14 +98,6 @@ if __name__ == "__main__":
 
 # TODO LIST
 #
-# CRITICAL
-# Load level from file
-# Display level
-# Add player
-# Add player movement
-# Add gravity
-# Add jumping
-#
 # HIGH
 # Add end of level
 # Add obstacles
