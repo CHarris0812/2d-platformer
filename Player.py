@@ -4,6 +4,7 @@ import math
 class Player():
     SPEED = 100
     GRAVITY = 0.05
+    JUMP_RATE = 3
     level_left, level_top = 0, 0
     scale_factor = 0
     #xPos and yPos are position of top left corner
@@ -25,7 +26,7 @@ class Player():
         else: self.dx = 0
 
         if keys[pygame.K_UP] and self.isOnGround(board): 
-            self.dy = -1
+            self.dy = -1 * self.JUMP_RATE
             self.yPos -= 1
 
         #Update dy using gravity
