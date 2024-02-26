@@ -100,7 +100,6 @@ if __name__ == "__main__":
 #
 # HIGH
 # Add end of level
-# Add obstacles
 # Create an actual level
 #
 # MEDIUM
@@ -109,6 +108,7 @@ if __name__ == "__main__":
 # Add level selector
 #
 # LOW
+# Make character not jittery
 # Add start screen
 # Add graphics
 # Add sound
