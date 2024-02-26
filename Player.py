@@ -38,6 +38,22 @@ class Player():
         else:
             self.yPos -= (self.dy * self.SPEED / self.FPS)
 
+        #Stop going left if would hit an object
+        self.xPos += (self.dx * self.SPEED / self.FPS)
+        if not self.canMoveLeft(board):
+            self.xPos -= (self.dx * self.SPEED / self.FPS)
+            self.dx = max(0, self.dx)
+        else:
+            self.xPos -= (self.dx * self.SPEED / self.FPS)
+
+        #Stop going right if would hit an object
+        self.xPos += (self.dx * self.SPEED / self.FPS)
+        if not self.canMoveRight(board):
+            self.xPos -= (self.dx * self.SPEED / self.FPS)
+            self.dx = min(0, self.dx)
+        else:
+            self.xPos -= (self.dx * self.SPEED / self.FPS)
+
         #Update dy using gravity    
         if self.canMoveDown(board): self.dy += self.GRAVITY
         else: self.dy = 0
@@ -83,6 +99,43 @@ class Player():
         for i in range(playerLeftGrid, playerRightGrid + 1):
             if board[playerTopGrid][i] == "#":
                 self.yPos = (playerTopGrid + 1) * self.scale_factor + self.level_top
+                return False
+            
+        return True
+    
+    #Check if player can move left
+    def canMoveLeft(self, board):
+        #Calculate bottom of player
+        playerBottom = self.yPos + self.scale_factor
+
+        #Convert player coordinates to grid
+        playerTopGrid = math.floor((self.yPos - self.level_top) / self.scale_factor)
+        playerLeftGrid = math.floor((self.xPos - self.level_left) / self.scale_factor)
+        playerBottomGrid = math.floor((playerBottom - self.level_top) / self.scale_factor)
+
+        #Determine if these are touching the board
+        for i in range(playerTopGrid, playerBottomGrid + 1):
+            if board[i][playerLeftGrid] == "#":
+                self.xPos = (playerLeftGrid + 1) * self.scale_factor + self.level_left
+                return False
+            
+        return True
+    
+    #Check if player can move right
+    def canMoveRight(self, board):
+        #Calculate bottom of player
+        playerBottom = self.yPos + self.scale_factor
+        playerRight = self.xPos + self.scale_factor
+
+        #Convert player coordinates to grid
+        playerTopGrid = math.floor((self.yPos - self.level_top) / self.scale_factor)
+        playerBottomGrid = math.floor((playerBottom - self.level_top) / self.scale_factor)
+        playerRightGrid = math.ceil((playerRight - self.level_left) / self.scale_factor)
+
+        #Determine if these are touching the board
+        for i in range(playerTopGrid, playerBottomGrid + 1):
+            if board[i][playerRightGrid] == "#":
+                self.xPos = (playerRightGrid - 2) * self.scale_factor + self.level_left
                 return False
             
         return True
