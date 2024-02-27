@@ -139,3 +139,23 @@ class Player():
                 return False
             
         return True
+    
+    #Check if player has reached the end of the level
+    def atLevelEnd(self, board):
+        #Calculate bottom of player
+        playerBottom = self.yPos + self.scale_factor
+        playerRight = self.xPos + self.scale_factor
+
+        #Convert player coordinates to grid
+        playerTopGrid = math.floor((self.yPos - self.level_top) / self.scale_factor)
+        playerBottomGrid = math.floor((playerBottom - self.level_top) / self.scale_factor)
+        playerLeftGrid = math.floor((self.xPos - self.level_left) / self.scale_factor)
+        playerRightGrid = math.ceil((playerRight - self.level_left) / self.scale_factor)
+
+        #Determine if these are touching the goal
+        for i in range(playerTopGrid, playerBottomGrid + 1):
+            for j in range(playerLeftGrid, playerRightGrid + 1):
+                if board[i][j] == "E":
+                    return True
+        
+        return False

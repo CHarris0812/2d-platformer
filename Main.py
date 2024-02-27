@@ -9,6 +9,8 @@ LEVEL_BACKGROUND_COLOR = (252, 251, 220)
 UNUSED_AREA_COLOR = (0, 0, 0)
 OBSTACLE_COLOR = (80, 80, 80)
 PLAYER_COLOR = (0, 0, 255)
+UNKNOWN_COLOR = (255, 0, 0)
+END_COLOR = (50, 255, 50)
 
 level_width, level_height = 0, 0
 screen_info = 0
@@ -42,7 +44,8 @@ def displayLevel(level_left, level_top):
         for j in range(level_width):
             if board[i][j] == ".": pixelColor = LEVEL_BACKGROUND_COLOR
             elif board[i][j] == "#": pixelColor = OBSTACLE_COLOR
-            else: pixelColor = (255, 0, 0)
+            elif board[i][j] == "E": pixelColor = END_COLOR
+            else: pixelColor = UNKNOWN_COLOR
 
             for k in range(SCALE_FACTOR):
                 for l in range(SCALE_FACTOR):
@@ -50,6 +53,10 @@ def displayLevel(level_left, level_top):
 
     return surface
 
+#Ends game once player has succeeded
+def endLevel():
+    print("Success")
+    exit()
 
 
 if __name__ == "__main__":
@@ -85,6 +92,10 @@ if __name__ == "__main__":
         player.updateLocation(keys, board)
         screen.blit(playerSurface, player.getTopLeftPosition())
 
+        #Check if player has reached end
+        if player.atLevelEnd(board):
+            endLevel()
+
         #Render screen
         pygame.display.flip()
         #Limit fps
@@ -106,6 +117,7 @@ if __name__ == "__main__":
 # Add enemies
 # Add multiple levels
 # Add level selector
+# Add success screen at end of level
 #
 # LOW
 # Make character not jittery
