@@ -1,4 +1,5 @@
 import pygame
+import time
 
 import Player
 
@@ -54,8 +55,22 @@ def displayLevel(level_left, level_top):
     return surface
 
 #Ends game once player has succeeded
-def endLevel():
-    print("Success")
+def endLevel(screen):
+    #Load end of level images
+    levelEnd = pygame.image.load(".\\resources\\Level_complete.png").convert()
+    mainMenu = pygame.image.load(".\\resources\\Main_menu.png").convert()
+    playAgain = pygame.image.load(".\\resources\\Play_again.png").convert()
+
+    #Display screen
+    screen_info = pygame.display.Info()
+    levelEnd = pygame.transform.scale(levelEnd, (screen_info.current_w, screen_info.current_h))
+    screen.blit(levelEnd, (0, 0))
+    screen.blit(mainMenu, (screen_info.current_w // 2 - screen_info.current_w // 3, screen_info.current_h // 2 + screen_info.current_h // 6))
+    screen.blit(playAgain, (screen_info.current_w // 2 + screen_info.current_w // 3 - playAgain.get_width(), screen_info.current_h // 2 + screen_info.current_h // 6))
+
+    #Render
+    pygame.display.flip()
+    time.sleep(5)
     exit()
 
 
@@ -94,7 +109,7 @@ if __name__ == "__main__":
 
         #Check if player has reached end
         if player.atLevelEnd(board):
-            endLevel()
+            endLevel(screen)
 
         #Render screen
         pygame.display.flip()
