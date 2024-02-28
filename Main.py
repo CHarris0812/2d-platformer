@@ -15,6 +15,7 @@ END_COLOR = (50, 255, 50)
 
 level_width, level_height = 0, 0
 screen_info = 0
+board = []
 
 #Load level file and generate board from it
 #param level: filename
@@ -57,25 +58,42 @@ def displayLevel(level_left, level_top):
 #Ends game once player has succeeded
 def endLevel(screen):
     #Load end of level images
-    levelEnd = pygame.image.load(".\\resources\\Level_complete.png").convert()
-    mainMenu = pygame.image.load(".\\resources\\Main_menu.png").convert()
-    playAgain = pygame.image.load(".\\resources\\Play_again.png").convert()
+    levelEnd = pygame.image.load(".\\resources\\Level_complete.png")
+    mainMenu = pygame.image.load(".\\resources\\Main_menu.png")
+    playAgain = pygame.image.load(".\\resources\\Play_again.png")
+
+    #Get button locations
+    screen_info = pygame.display.Info()
+    mainMenuPos = (screen_info.current_w // 2 - screen_info.current_w // 3, screen_info.current_h // 2 + screen_info.current_h // 6)
+    playAgainPos = (screen_info.current_w // 2 + screen_info.current_w // 3 - playAgain.get_width(), screen_info.current_h // 2 + screen_info.current_h // 6)
 
     #Display screen
-    screen_info = pygame.display.Info()
     levelEnd = pygame.transform.scale(levelEnd, (screen_info.current_w, screen_info.current_h))
     screen.blit(levelEnd, (0, 0))
-    screen.blit(mainMenu, (screen_info.current_w // 2 - screen_info.current_w // 3, screen_info.current_h // 2 + screen_info.current_h // 6))
-    screen.blit(playAgain, (screen_info.current_w // 2 + screen_info.current_w // 3 - playAgain.get_width(), screen_info.current_h // 2 + screen_info.current_h // 6))
+    screen.blit(mainMenu, mainMenuPos)
+    screen.blit(playAgain, playAgainPos)
 
     #Render
     pygame.display.flip()
-    time.sleep(5)
-    exit()
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                exit()
 
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                mouse_x, mouse_y = pygame.mouse.get_pos()
 
-if __name__ == "__main__":
-    board = generateLevel("test_level.txt")
+                # Check if the click is within the button rectangles
+                if mainMenu.get_rect(topleft=mainMenuPos).collidepoint(mouse_x, mouse_y):
+                    print("main menu")
+
+                if playAgain.get_rect(topleft=playAgainPos).collidepoint(mouse_x, mouse_y):
+                    print("play again")
+                    return "REPLAY"
+
+def playLevel(level):
+    global board, screen_info
+    board = generateLevel(level)
 
     pygame.init()
     screen_info = pygame.display.Info()
@@ -109,14 +127,20 @@ if __name__ == "__main__":
 
         #Check if player has reached end
         if player.atLevelEnd(board):
-            endLevel(screen)
+            return screen
 
         #Render screen
         pygame.display.flip()
         #Limit fps
         clock.tick(MAX_FPS)
 
-        
+
+if __name__ == "__main__":
+    level = "test_level.txt"
+    while True:
+        screen = playLevel(level)
+        newLevel = endLevel(screen)
+        if newLevel != "REPLAY": level = newLevel
 
 
     
@@ -125,7 +149,6 @@ if __name__ == "__main__":
 # TODO LIST
 #
 # HIGH
-# Add end of level
 # Create an actual level
 #
 # MEDIUM
