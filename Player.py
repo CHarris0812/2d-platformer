@@ -20,13 +20,17 @@ class Player():
 
     #Check for key presses and move
     def updateLocation(self, keys, board):
+        movingLeft = keys[pygame.K_LEFT] or keys[pygame.K_a]
+        movingRight = keys[pygame.K_RIGHT] or keys[pygame.K_d]
+        movingUp = keys[pygame.K_UP] or keys[pygame.K_w]
+
         #Define dx and dy
-        if keys[pygame.K_LEFT] and not keys[pygame.K_RIGHT]: self.dx = -1
-        elif keys[pygame.K_RIGHT] and not keys[pygame.K_LEFT]: self.dx = 1
+        if movingLeft and not movingRight: self.dx = -1
+        elif movingRight and not movingLeft: self.dx = 1
         else: self.dx = 0
 
         #If up arrow and not already in air
-        if keys[pygame.K_UP] and not self.canMoveDown(board): 
+        if movingUp and not self.canMoveDown(board): 
             self.dy = -1 * self.JUMP_RATE
             self.yPos -= 1
 
