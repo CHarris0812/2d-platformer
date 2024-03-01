@@ -75,6 +75,30 @@ def endLevelSuccess(screen):
 
     #Render
     pygame.display.flip()
+    return getUserEndOfLevelDecision(mainMenu, playAgain, mainMenuPos, playAgainPos)
+
+def endLevelFailure(screen):
+    #Load end of level images
+    levelEnd = pygame.image.load(".\\resources\\Level_failed.png")
+    mainMenu = pygame.image.load(".\\resources\\Main_menu.png")
+    playAgain = pygame.image.load(".\\resources\\Play_again.png")
+
+    #Get button locations
+    screen_info = pygame.display.Info()
+    mainMenuPos = (screen_info.current_w // 2 - screen_info.current_w // 3, screen_info.current_h // 2 + screen_info.current_h // 6)
+    playAgainPos = (screen_info.current_w // 2 + screen_info.current_w // 3 - playAgain.get_width(), screen_info.current_h // 2 + screen_info.current_h // 6)
+
+    #Display screen
+    levelEnd = pygame.transform.scale(levelEnd, (screen_info.current_w, screen_info.current_h))
+    screen.blit(levelEnd, (0, 0))
+    screen.blit(mainMenu, mainMenuPos)
+    screen.blit(playAgain, playAgainPos)
+
+    #Render
+    pygame.display.flip()
+    return getUserEndOfLevelDecision(mainMenu, playAgain, mainMenuPos, playAgainPos)
+
+def getUserEndOfLevelDecision(mainMenu, playAgain, mainMenuPos, playAgainPos):
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -141,6 +165,8 @@ if __name__ == "__main__":
         screen, success = playLevel(level)
         if success:
             newLevel = endLevelSuccess(screen)
+        else:
+            newLevel = endLevelFailure(screen)
 
         if newLevel != "REPLAY": level = newLevel
 
