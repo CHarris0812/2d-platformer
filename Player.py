@@ -146,6 +146,12 @@ class Player():
     
     #Check if player has reached the end of the level
     def atLevelEnd(self, board):
+        return self.isTouchingObject(board, "E")
+    
+    def touchingLava(self, board):
+        return self.isTouchingObject(board, "X")
+    
+    def isTouchingObject(self, board, object):
         #Calculate bottom of player
         playerBottom = self.yPos + self.scale_factor
         playerRight = self.xPos + self.scale_factor
@@ -159,7 +165,7 @@ class Player():
         #Determine if these are touching the goal
         for i in range(playerTopGrid, playerBottomGrid + 1):
             for j in range(playerLeftGrid, playerRightGrid + 1):
-                if board[i][j] == "E":
+                if board[i][j] == object:
                     return True
         
         return False

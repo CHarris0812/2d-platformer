@@ -114,7 +114,6 @@ def getUserEndOfLevelDecision(mainMenu, playAgain, mainMenuPos, playAgainPos):
                     print("main menu")
 
                 if playAgain.get_rect(topleft=playAgainPos).collidepoint(mouse_x, mouse_y):
-                    print("play again")
                     return "REPLAY"
 
 def playLevel(level):
@@ -151,6 +150,10 @@ def playLevel(level):
         player.updateLocation(keys, board)
         screen.blit(playerSurface, player.getTopLeftPosition())
 
+        #Check if player is touching lava
+        if player.touchingLava(board):
+            return screen, False
+        
         #Check if player has reached end
         if player.atLevelEnd(board):
             return screen, True
