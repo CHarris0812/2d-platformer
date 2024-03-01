@@ -56,7 +56,7 @@ def displayLevel(level_left, level_top):
     return surface
 
 #Ends game once player has succeeded
-def endLevel(screen):
+def endLevelSuccess(screen):
     #Load end of level images
     levelEnd = pygame.image.load(".\\resources\\Level_complete.png")
     mainMenu = pygame.image.load(".\\resources\\Main_menu.png")
@@ -127,7 +127,7 @@ def playLevel(level):
 
         #Check if player has reached end
         if player.atLevelEnd(board):
-            return screen
+            return screen, True
 
         #Render screen
         pygame.display.flip()
@@ -138,8 +138,10 @@ def playLevel(level):
 if __name__ == "__main__":
     level = "test_level.txt"
     while True:
-        screen = playLevel(level)
-        newLevel = endLevel(screen)
+        screen, success = playLevel(level)
+        if success:
+            newLevel = endLevelSuccess(screen)
+
         if newLevel != "REPLAY": level = newLevel
 
 
