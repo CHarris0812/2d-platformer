@@ -10,8 +10,9 @@ LEVEL_BACKGROUND_COLOR = (252, 251, 220)
 UNUSED_AREA_COLOR = (0, 0, 0)
 OBSTACLE_COLOR = (80, 80, 80)
 PLAYER_COLOR = (0, 0, 255)
-UNKNOWN_COLOR = (255, 0, 0)
+UNKNOWN_COLOR = (255, 255, 255)
 END_COLOR = (50, 255, 50)
+LAVA_COLOR = (255, 0, 0)
 
 level_width, level_height = 0, 0
 screen_info = 0
@@ -47,6 +48,7 @@ def displayLevel(level_left, level_top):
             if board[i][j] == ".": pixelColor = LEVEL_BACKGROUND_COLOR
             elif board[i][j] == "#": pixelColor = OBSTACLE_COLOR
             elif board[i][j] == "E": pixelColor = END_COLOR
+            elif board[i][j] == "X": pixelColor = LAVA_COLOR
             else: pixelColor = UNKNOWN_COLOR
 
             for k in range(SCALE_FACTOR):
