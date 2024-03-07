@@ -44,11 +44,14 @@ class Player():
 
         #Stop going left if would hit an object
         self.xPos += (self.dx * self.SPEED / self.FPS)
-        if not self.canMoveLeft(board):
-            self.xPos -= (self.dx * self.SPEED / self.FPS)
+        leftOpen, playerLeftGrid = self.canMoveLeft(board)
+        self.xPos -= (self.dx * self.SPEED / self.FPS)
+        
+        if not leftOpen:
             self.dx = max(0, self.dx)
-        else:
-            self.xPos -= (self.dx * self.SPEED / self.FPS)
+            self.xPos = (playerLeftGrid + 1) * self.scale_factor + self.level_left
+
+        #self.xPos = (playerLeftGrid + 1) * self.scale_factor + self.level_left
 
         #Stop going right if would hit an object
         self.xPos += (self.dx * self.SPEED / self.FPS)
@@ -120,10 +123,9 @@ class Player():
         #Determine if these are touching the board
         for i in range(playerTopGrid, playerBottomGrid + 1):
             if board[i][playerLeftGrid] == "#":
-                self.xPos = (playerLeftGrid + 1) * self.scale_factor + self.level_left
-                return False
+                return False, playerLeftGrid
             
-        return True
+        return True, playerLeftGrid
     
     #Check if player can move right
     def canMoveRight(self, board):
