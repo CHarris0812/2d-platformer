@@ -3,7 +3,7 @@ import math
 
 class Player():
     SPEED = 150
-    GRAVITY = 0.05
+    GRAVITY = 3
     JUMP_RATE = 3
     level_left, level_top = 0, 0
     scale_factor = 0
@@ -43,10 +43,7 @@ class Player():
             self.yPos -= (self.dy * self.SPEED / self.FPS)
 
         #Stop going left if would hit an object
-        self.xPos += (self.dx * self.SPEED / self.FPS)
         leftOpen, playerLeftGrid = self.canMoveLeft(board)
-        self.xPos -= (self.dx * self.SPEED / self.FPS)
-        
         if not leftOpen:
             self.dx = max(0, self.dx)
             self.xPos = (playerLeftGrid + 1) * self.scale_factor + self.level_left
@@ -62,7 +59,7 @@ class Player():
             self.xPos -= (self.dx * self.SPEED / self.FPS)
 
         #Update dy using gravity    
-        if self.canMoveDown(board): self.dy += self.GRAVITY
+        if self.canMoveDown(board): self.dy += self.GRAVITY / self.FPS
         else: self.dy = 0
 
         #Move
@@ -117,7 +114,7 @@ class Player():
 
         #Convert player coordinates to grid
         playerTopGrid = math.floor((self.yPos - self.level_top) / self.scale_factor)
-        playerLeftGrid = math.floor((self.xPos - self.level_left) / self.scale_factor)
+        playerLeftGrid = math.floor((self.xPos + (self.dx * self.SPEED / self.FPS) - self.level_left) / self.scale_factor)
         playerBottomGrid = math.floor((playerBottom - self.level_top) / self.scale_factor)
 
         #Determine if these are touching the board
