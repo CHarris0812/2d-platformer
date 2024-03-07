@@ -1,5 +1,4 @@
 import pygame
-import time
 
 import Player
 
@@ -14,6 +13,7 @@ UNKNOWN_COLOR = (255, 255, 255)
 END_COLOR = (50, 255, 50)
 LAVA_COLOR = (255, 0, 0)
 
+playerStart = ()
 level_width, level_height = 0, 0
 screen_info = 0
 board = []
@@ -22,14 +22,22 @@ board = []
 #param level: filename
 #return: array of chars representing level
 def generateLevel(level):
-    global level_width, level_height
+    global level_width, level_height, levelData
     board = []
     f = open(PATH_TO_LEVELS + level)
+
+    levelData = eval(f.readline().replace("\n", ""))
+    readData(levelData)
+
     for line in f:
         board.append(list(line.replace("\n", "")))
     level_width = len(board[0])
     level_height = len(board)
     return board
+
+def readData(levelData):
+    global playerStart
+    playerStart = levelData["playerStart"]
 
 #Display level represented as array using pygame
 #param level: array of level
@@ -117,7 +125,7 @@ def getUserEndOfLevelDecision(mainMenu, playAgain, mainMenuPos, playAgainPos):
                     return "REPLAY"
 
 def playLevel(level):
-    global board, screen_info
+    global board, screen_info, playerStart
     board = generateLevel(level)
 
     pygame.init()
@@ -132,7 +140,7 @@ def playLevel(level):
     level = displayLevel(level_left, level_top)
 
     #Create player
-    player = Player.Player(MAX_FPS, 600, 600, level_left, level_top, SCALE_FACTOR)
+    player = Player.Player(MAX_FPS, level_left + playerStart[0] * SCALE_FACTOR, level_top + playerStart[1] * SCALE_FACTOR, level_left, level_top, SCALE_FACTOR)
     playerSurface = pygame.Surface((SCALE_FACTOR * 2, SCALE_FACTOR * 2))
     playerSurface.fill(PLAYER_COLOR)
 
@@ -200,3 +208,4 @@ if __name__ == "__main__":
 # Level creator
 # Import/export level
 # 2 player mode
+# Timer
